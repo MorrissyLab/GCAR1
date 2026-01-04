@@ -2,7 +2,7 @@
 #### my colours           ####
 #### - project: [ GCAR1 ] ####
 ##############################
-# version: 1.12 (2024-12-13)
+# version: 1.14.1 (2026-01-04)
 # by hyojinsong
 today <- Sys.Date()
 # ---
@@ -25,6 +25,8 @@ lapply(mypackages, library, character.only = TRUE)
 
 #### GCAR ####
 ## #1 | longitudinal sample ##
+# ---
+## [Patient-01_Dose-01] - aka [SPS-Q] ##
 ## - note: created based on [Dark2] (n=7)
 col_gcar_e <- "#666666" #dark_grey
 col_gcar_h <- "#bf5b17" #brown
@@ -34,6 +36,26 @@ col_gcar_d22 <- "#e6ab02" #yellow
 col_gcar_d28 <- "#1b9e77" #dark_green
 col_gcar_d42 <- "#386cb0" #blue
 smpColor <- setNames(c(col_gcar_p,col_gcar_t,col_gcar_d08,col_gcar_d15,col_gcar_d22,col_gcar_d28,col_gcar_d42), c("Enriched_Apheresis","GCAR1_Product","D08","D15","D22","D28","D42")) #sample_new
+# ---
+## [Patient-01_Dose-02] - aka [SPS-Q2] ##
+## - note: created based on [Dark2] + similar colours to differentiate between new samples (n=10*)
+##         --> *[10 samples] = { 7 new samples from the same patient before/after 2nd infusion } + { 3 RERUN samples from the same patient before/after 1st infusion }
+col_gcar_bx_pre <- "#8c6bb1" #light_purple
+col_gcar_bx_post <- "#810f7c" #dark_purple
+
+col_gcar_md7 <- "#666666" #dark_grey #minus_day7
+
+col_gcar_d04 <- "#a6761d" #earthy_brown
+col_gcar_d08 <- "#a6d854" #light_green
+col_gcar_d11 <- "#1b9e77" #green
+col_gcar_d14 <- "#80b1d3" #light_blue
+
+col_gcar_p_re <- "#bf5b17" #brown #harvest
+col_gcar_d15_re <- "#e7298a" #pink
+col_gcar_d22_re <- "#e6ab02" #yellow
+
+smpColor <- setNames(c(col_gcar_p_re,col_gcar_d15_re,col_gcar_d22_re, col_gcar_bx_pre,col_gcar_md7, col_gcar_d04,col_gcar_d08,col_gcar_d11,col_gcar_d14,col_gcar_bx_post), 
+                     c("GCAR1product-RERUN","D15-RERUN","D22-RERUN", "Biopsy-PRE","DAY-7-20250210", "DAY04-20250221","DAY08-20250225","DAY11-20250228","DAY14-20250303","Biopsy-POST")) #nSmp=10
 # ---
 
 
@@ -136,4 +158,62 @@ ccColor21 <- setNames( cols25(n = 25)[1:nCellClass_specific], list_CellClass_spe
 # ncMonocyte        #36648B
 # NK                #00E2E5
 # NKT               #00FF00
+# ---
+
+## #5 | cell type ##
+## - note: built based on this colour palette above: [ccColor21] -- union
+fn_csv_ctColor49 <- "./list_ctColor49.csv"
+csv_ctColor49 <- read.csv(file = fn_csv_ctColor49, header = T)
+head(csv_ctColor49,3)
+#           list_label_cellType ctColor49
+# 1                      B_cell   #1F78C8
+# 2                  Blood_cell   #3B00FB
+# 3                         CD4   #ff0000
+# 4                    CD4_Treg   #33a02c
+# 5                       CD4cm   #66B0FF
+# 6                CD4cytotoxic   #FA0087
+# 7                       CD4em   #6A33C2
+# 8                   CD4helper   #D85FF7
+# 9                        CD4m   #1C7F93
+# 10                   CD4naive   #ff7f00
+# 11            CD4naive_helper   #565656
+# 12                        CD8   #7ED7D1
+# 13                      CD8cm   #B5EFB5
+# 14               CD8cytotoxic   #822E1C
+# 15                       CD8e   #FFD700
+# 16                    CD8e_td   #a6cee3
+# 17                      CD8em   #FB6496
+# 18                 CD8em_MAIT   #b2df8a
+# 19                   CD8em_NK   #CAB2D6
+# 20                   CD8em_td   #FDBF6F
+# 21              CD8em_td_MAIT   #999999
+# 22                       CD8m   #BDCDFF
+# 23                   CD8naive   #AAF400
+# 24                        cDC   #782AB6
+# 25                         DC   #EEE685
+# 26           Endothelial_cell   #C075A6
+# 27 Endothelial_cell_capillary   #F7E1A0
+# 28            Epithelial_cell   #FC1CBF
+# 29                 Fibroblast   #683B79
+# 30                        HSC   #C8308C
+# 31                 Lymphocyte   #FF83FA
+# 32                 Macrophage   #1CBE4F
+# 33                       MAIT   #C814FA
+# 34                        mDC   #FBE426
+# 35                   Monocyte   #0000FF
+# 36                 ncMonocyte   #36648B
+# 37                 Neutrophil   #B10DA1
+# 38                    NK_cell   #00E2E5
+# 39                        pDC   #85660D
+# 40                   Pericyte   #1C8356
+# 41                        SMC   #C4451C
+# 42                     T_cell   #325A9B
+# 43                  T_cell_ab   #F8A19F
+# 44                  T_cell_gd   #AA0DFE
+# 45                   T_cell_h   #DEA0FD
+# 46                T_cell_MAIT   #2ED9FF
+# 47                  T_cell_NK   #00FF00
+# 48                       Treg   #90AD1C
+# 49                Tumor_cells   #5A5156
+ctColor49 <- setNames( csv_ctColor49$ctColor49, csv_ctColor49$list_label_cellType ) #49
 # ---
