@@ -1,4 +1,4 @@
-#!/usr/bin/env Rscript
+t#!/usr/bin/env Rscript
 
 suppressPackageStartupMessages({
   library(Seurat)
@@ -15,7 +15,7 @@ suppressPackageStartupMessages({
 # Parameters
 
 sample_order <- c(
-  "apheresis", "product", "D8", "D15_SOC",
+  "apheresis", "harvest", "D8", "D15_SOC",
   "D17_SOC", "D22", "D31", "D46"
 )
 
@@ -74,7 +74,7 @@ ggsave(
 )
 
 
-## Fig 4e  UMAP GCAR⁺ vs GCAR⁻
+## Fig  UMAP GCAR⁺ vs GCAR⁻
 # ============================================================
 umap_df <- FetchData(integrated, vars = "GCAR_pos") %>%
   cbind(Embeddings(integrated, "umap"))
