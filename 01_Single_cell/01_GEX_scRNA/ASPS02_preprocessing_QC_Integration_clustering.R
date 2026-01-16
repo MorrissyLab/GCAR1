@@ -19,8 +19,6 @@ samples <- c(
 )
 
 # QC thresholds
-min_features <- 200
-max_features <- 6000
 max_mito     <- 20
 
 
