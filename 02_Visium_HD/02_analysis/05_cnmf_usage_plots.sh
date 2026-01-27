@@ -3,12 +3,12 @@
 #SBATCH --job-name=cNMF_plots
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --mincpus=1
-#SBATCH --mem=36G
+#SBATCH --cpus-per-task=4
+#SBATCH --mem=72G
 #SBATCH --signal=2
 #SBATCH --no-requeue
-#SBATCH --partition=cpu2023,cpu2022-bf24,cpu2022,cpu2021-bf24,cpu2021,cpu2019-bf05,cpu2019,cpu2017-bf05,parallel,single
-#SBATCH --time=05:00:00
+#SBATCH --partition=cpu2023,cpu2022-bf24,cpu2022,cpu2021-bf24,cpu2021,cpu2019-bf05,cpu2019,cpu2017-bf05,single
+#SBATCH --time=24:00:00
 #SBATCH -o %A_%a.stdout.txt
 #SBATCH -e %A_%a.stderr.txt
 #SBATCH --export=ALL
@@ -35,7 +35,3 @@ SEP="_"
 
 ####### Run your script #########################
 python plots.py ${RANK} ${USAGE_FILE} ${METADATA_FILE_CSV} ${SAMPLES_FILE} ${SR_OUTPUT} ${PLOT_DIRECTORY} ${ROWS} ${COLS} ${MAX_CUTOFF} ${SEP}
-wait
-
-# The combined plots for Visium HD data are multi-GB files, which can be difficult to open on any computer.
-# python pdfcombine.py ${RANK} ${PLOT_DIRECTORY}

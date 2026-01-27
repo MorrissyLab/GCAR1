@@ -22,10 +22,26 @@ LOW_RES = True
 HI_RES_DPI = 3000
 LOW_RES_DPI = 1250
 GENE_PLOTTING = True
-HE_PLOTTING = True
-USAGE_PLOTTING = True
+HE_PLOTTING = False
+USAGE_PLOTTING = False
 
-GENE_LIST = ["GPNMB"]
+BINARIZE = False
+GENE_LIST = ["IL1B", "CCL3", "CXCL1", "CXCL2", "CXCL3", "CXCL5",
+            "IDO1", "IDO2", "ISG15", "CXCL8", "CXCL9", "CXCL10",
+            "ARG1", "MRC1", "CD274", "CX3CR1",
+            "MKI67", "CDK1",
+            "LYVE1", "HES1", "FOLR2",
+            "VEGFA", "SPP1",
+            "APOC1", "APOE", "ACP5", "FABP5", "TREM1", "TREM2", "SPP1",
+            "GPNMB", "TFE3", "ASPSCR1", "MRC1", "CD3D", "CD3E", "CD3G", "CD4",
+            "CD8A", "CD19", "COL6A1", "VEGFA", "VEGFB", "VEGFC", "VEGFD", "HIF1A",
+            "VWF", "PECAM1", "CD34", "PECAM1", "MS4A1", "TNC", "FN1", "MYH1",
+            "PEX7", "GCAR", "CD274", "PDCD1", "ATF1", "HMGB2", "EIF2A", "CYC1",
+            "ANXA6", "GUK1", "CD44", "LGALS3BP", "CD68",
+            "CTLA4", "CD80", "CD86",
+            "TIGIT", "PVR", "NECTIN2",
+            "KLRB1", "CLEC2D",
+            "FAS", "FASLG"]
 
 def load_metadata(clusters_path, cluster_key=None):
     """
@@ -119,7 +135,7 @@ def create_rank_plots(usage_norm, metadata_df, samples_df, SAMPLE_DIRECTORY_PATH
         cbar = plt.colorbar(cm.ScalarMappable(norm = None, cmap = cmap), ax = axes_hist[index], ticks = [0, 1], shrink = 0.8, pad = 0.03)
         cbar.ax.set_yticklabels([str(0.00), '%s' % float('%.1g' % VMAX)], fontsize=15)
 
-        sc.pl.spatial(sample_read_data, img_key="hires", color='Usage_' + str(metagene), show=False, title=sample,
+        sc.pl.spatial(sample_read_data, img_key=None, color='Usage_' + str(metagene), show=False, title=sample,
                   vmin=VMIN, vmax=VMAX, color_map=color_scale, use_raw=True, ax=axes_hist[index], 
                   legend_loc=None, colorbar_loc=None, na_color="black", na_in_legend=False)
 
