@@ -2339,7 +2339,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS || NEIGHBOURHOOD_ANALYSIS_GCAR_CELLS ||
   }
 }
 
-# 4.3 Neighbourhood of the GCAR+ / T-cell Program+ Cells ----
+# 3.1 Neighbourhood of the GCAR+ / T-cell Program+ Cells ----
 if (NEIGHBOURHOOD_ANALYSIS_GCAR_CELLS){
   # 1.0 Clear existing non-function variables, set the save folders (create them if they doesn't exist) ----
   rm(list = setdiff(setdiff(ls(), lsf.str()), program_var_names))
@@ -2508,11 +2508,11 @@ if (NEIGHBOURHOOD_ANALYSIS_GCAR_CELLS){
   draw(ht_combined_clust, padding = unit(c(3, 3, 3, 3), "cm"))
   dev.off()
 
-  # 1.9.3 Save the Rdata image, so plotting changes can be easily performed ----
+  # 1.9.2 Save the Rdata image, so plotting changes can be easily performed ----
   save.image(paste(save_path, "GCAR_Cell", "_neighbourhood_save.RData", sep = ""))
 }
 
-# 4.5 Neighbourhood of each program ----
+# 3.2 Neighbourhood of each program ----
 if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
   rm(list = setdiff(setdiff(ls(), lsf.str()), program_var_names))
   usage_threshold <- GLOBAL_THRESHOLD
@@ -2530,20 +2530,20 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
   foreach(program = seq_len(ncol(usage_norm)), .packages = loaded_packages) %dopar% {
     print(program)
 
-    # 1.0 Clear existing non-function variables, set the save folders (create them if they doesn't exist) ----
+    # 2.0 Clear existing non-function variables, set the save folders (create them if they doesn't exist) ----
     save_path <- paste(SAVE_FOLDER, "K", RANK, "/neighbourhood_analysis/Programs/GEP_", program, "/", sep = "")
     create_folder(save_path)
 
-    # 1.1 Get the GEP+ cells, the spot coordinates from the 3 samples, and their intersection ----
+    # 2.1 Get the GEP+ cells, the spot coordinates from the 3 samples, and their intersection ----
     gep_pos_spots <- rownames(usage_norm[usage_norm[, program] >= usage_threshold,])
 
     # Get the spot names and merge them with the union_cell_coordinate dataframe
     gep_pos_spots <- intersect(gep_pos_spots, rownames(union_cell_coordinate))
 
-    # 1.2 Subset the spot neighbors ----
+    # 2.2 Subset the spot neighbors ----
     spot_neighbours_df_subset <- spot_neighbours_df_wo_overlaps[spot_neighbours_df_wo_overlaps$spot_of_interest %in% gep_pos_spots,]
 
-    # 1.3 Make the spot_neighbour_programs_df ----
+    # 2.3 Make the spot_neighbour_programs_df ----
     # The final_df will have additional columns that are named on the unique program-radii combinations
     # Cbind the program_neighbors_df with an empty matrix w/ ncol = unique programs * unique radii
     program_radius_comb_df <- expand.grid(colnames(usage_norm), unique(spot_neighbours_df_subset$r))
@@ -2554,7 +2554,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
                           dimnames = list(NULL, program_radius_comb_df$GEP_r_comb))
     spot_neighbour_programs_df <- cbind(spot_neighbours_df_subset, temp_matrix)
 
-    # 1.4 Get the binarized usage sum per program for all a spots neighbors ----
+    # 2.4 Get the binarized usage sum per program for all a spots neighbors ----
     # Iterate i over each row (spot-radius combination) of the program_neighbours_df
     for (i in seq_len(nrow(spot_neighbour_programs_df))){
       # Get the neighbors for the current row (spot-radius combination)
@@ -2571,7 +2571,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
       spot_neighbour_programs_df[i, c(colnames_to_paste)] <- neighbor_programs_sum
     }
 
-    # 1.5 Remove the spot-radii combs, thereby flattening the df ----
+    # 2.5 Remove the spot-radii combs, thereby flattening the df ----
     spot_neighbour_programs_df_flat <- data.frame()
     for (soi in unique(spot_neighbour_programs_df$spot_of_interest)){
       soi_program_subset <- spot_neighbour_programs_df[spot_neighbour_programs_df$spot_of_interest == soi,]
@@ -2591,7 +2591,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
       }
     }
 
-    # 1.6 Modify the spot_neighbour_programs_df_flat for plotting ----
+    # 2.6 Modify the spot_neighbour_programs_df_flat for plotting ----
     # Add a tissue column and organize the columns
     spot_neighbour_programs_df_flat <- as.data.frame(spot_neighbour_programs_df_flat)
     spot_neighbour_programs_df_flat[, c(4:7)] <- as.numeric(unlist(spot_neighbour_programs_df_flat[, c(4:7)]))
@@ -2605,8 +2605,8 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
     spot_neighbour_programs_df_flat_plot <- t(spot_neighbour_programs_df_flat[, c(9:ncol(spot_neighbour_programs_df_flat))])
     colnames(spot_neighbour_programs_df_flat_plot) <- c(spot_neighbour_programs_df_flat$spot_of_interest)
 
-    # 1.7 Plotting ----
-    # 1.7.1 Create the annotations ----
+    # 2.7 Plotting ----
+    # 2.7.1 Create the annotations ----
     haT <- HeatmapAnnotation(sample = spot_neighbour_programs_df_flat_annot$sample,
                              nr_neigh_r0 = spot_neighbour_programs_df_flat_annot$nr_neigh_r0,
                              nr_neigh_r1 = spot_neighbour_programs_df_flat_annot$nr_neigh_r1,
@@ -2642,7 +2642,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
     # Determine the plot height
     plot_height <- (0.1969*nrow(spot_neighbour_programs_df_flat_plot)) + 1.3386 + (length(haT@anno_size) * 5 / 10)
 
-    # 1.7.2 Plot but w/o the gene expression tracks ----
+    # 2.7.2 Plot but w/o the gene expression tracks ----
     ht_combined <- Heatmap(spot_neighbour_programs_df_flat_plot, left_annotation = haL, top_annotation = haT,
                            name = "Mean of Neighbour Program",
                            cluster_columns = TRUE, cluster_rows = FALSE, col = col_fun,
@@ -2681,18 +2681,18 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS){
     draw(ht_combined_clust, padding = unit(c(3, 3, 3, 3), "cm"))
     dev.off()
 
-    # 1.8 Save the Rdata image, so plotting changes can be easily performed ----
+    # 2.8 Save the Rdata image, so plotting changes can be easily performed ----
     save(list = ls(environment()), file = paste0(save_path, "GEP", program, "_neighbourhood_save.RData"))
   }
   stopCluster(cl)
 }
 
-# 3.2 Custom neighbourhood splitting and dot plot ----
+# 3.3 Custom neighbourhood splitting and dot plot ----
 if (NEIGHBORHOOD_ANALYSIS_SUMMARY){
   rm(list = setdiff(setdiff(ls(), lsf.str()), program_var_names))
 
   for (program_selection in NEIGHBORHOOD_ANALYSIS_SUMMARY_PROGRAMS){
-    # 2.1 Clear existing non-function variables, set the save folders (create them if they doesn't exist) ----
+    # 3.1 Clear existing non-function variables, set the save folders (create them if they doesn't exist) ----
     save_path <- paste(SAVE_FOLDER, "K", RANK, "/neighbourhood_analysis/Programs/GEP_",
                        program_selection, "/GEP", program_selection, sep = "")
     usage_threshold <- GLOBAL_THRESHOLD
@@ -2701,7 +2701,7 @@ if (NEIGHBORHOOD_ANALYSIS_SUMMARY){
 
     load(paste(save_path, "_neighbourhood_save.RData", sep = ""))
 
-    # 2.2 Make the heatmap, extract Kmeans column order, and then further differentiate large niches ----
+    # 3.2 Make the heatmap, extract Kmeans column order, and then further differentiate large niches ----
     split <- data.frame(cutree(hclust(dist(t(spot_neighbour_programs_df_flat_plot))),
                                k = dendro_split),
                         col_spliter)
@@ -2776,7 +2776,7 @@ if (NEIGHBORHOOD_ANALYSIS_SUMMARY){
       rep(name, length(values))
     }))[order(unlist(heatmap_col_order))]
 
-    # 2.3 Plot the final heatmap with the more granular niches ----
+    # 3.3 Plot the final heatmap with the more granular niches ----
     ht_combined <- Heatmap(spot_neighbour_programs_df_flat_plot,
                            left_annotation = haL, top_annotation = haT,
                            name = "Mean of Neighbour Program",
@@ -2790,8 +2790,8 @@ if (NEIGHBORHOOD_ANALYSIS_SUMMARY){
     draw(ht_combined, padding = unit(c(3, 3, 3, 3), "cm"))
     dev.off()
 
-    # 2.4 Make a Dot plot with these niches ----
-    # 2.4.1 Prepare the Seurat object with the niche info ----
+    # 3.4 Make a Dot plot with these niches ----
+    # 3.4.1 Prepare the Seurat object with the niche info ----
     combined_layers_subset <- combined_layers
     combined_layers_subset@meta.data$spot <- rownames(combined_layers_subset@meta.data)
     combined_layers_subset@meta.data$sample <- paste(sapply(strsplit(combined_layers_subset@meta.data$spot, "_"), "[", 1))
@@ -2810,7 +2810,7 @@ if (NEIGHBORHOOD_ANALYSIS_SUMMARY){
                                               spot_neighbour_programs_df_flat_mod[9:ncol(spot_neighbour_programs_df_flat_mod)])
     cols_to_plot <- colnames(combined_layers_subset@meta.data)[7:(ncol(combined_layers_subset@meta.data)-1)]
 
-    # 2.4.2 Create the dot plot ----
+    # 3.4.2 Create the dot plot ----
     pdf(paste(save_path, "Neighbourhood_dot_plot_Dendro_", dendro_split, "_Split_Custom.pdf", sep = ""), height = 14, width = 10)
     DotPlot(combined_layers_subset,
             features = cols_to_plot,
@@ -2826,7 +2826,7 @@ if (NEIGHBORHOOD_ANALYSIS_SUMMARY){
     }
     dev.off()
 
-    # 2.5 Save the spot id's per niche ----
+    # 3.5 Save the spot id's per niche ----
     niche_spot_ids <- list()
     for (niche in names(heatmap_col_order)){
       spot_names <-  colnames(spot_neighbour_programs_df_flat_plot)
