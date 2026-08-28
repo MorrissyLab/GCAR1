@@ -2259,7 +2259,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS || NEIGHBOURHOOD_ANALYSIS_GCAR_CELLS ||
   options(future.globals.maxSize = 1e20)
 
   # Check if the spot neighbours file exists, if not, then make it and save it
-  if (!file.exists(paste("02_Visium_HD/03_datasets/04_bin_neighbours/ASPS-02/", "spot_neighbours_df.rds", sep = ""))){
+  if (!file.exists(paste("02_Visium_HD/03_datasets/03_bin_neighbours/ASPS-02/", "spot_neighbours_df.rds", sep = ""))){
     spot_neighbours_df <- data.frame()
 
     for (sample in so_list) {
@@ -2277,10 +2277,10 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS || NEIGHBOURHOOD_ANALYSIS_GCAR_CELLS ||
     }
 
     saveRDS(spot_neighbours_df, file = paste(SAVE_FOLDER, "spot_neighbours_df.rds", sep = ""))
-  } else{spot_neighbours_df <- readRDS(paste("02_Visium_HD/03_datasets/04_bin_neighbours/ASPS-02/", "spot_neighbours_df.rds", sep = ""))}
+  } else{spot_neighbours_df <- readRDS(paste("02_Visium_HD/03_datasets/03_bin_neighbours/ASPS-02/", "spot_neighbours_df.rds", sep = ""))}
   print("Spot Neighbours Dataframe Created and Saved:")
   print(Sys.time())
-  if (!file.exists(paste("02_Visium_HD/03_datasets/04_bin_neighbours/ASPS-02/", "spot_neighbours_df_wo_overlaps.rds", sep = ""))){
+  if (!file.exists(paste("02_Visium_HD/03_datasets/03_bin_neighbours/ASPS-02/", "spot_neighbours_df_wo_overlaps.rds", sep = ""))){
     spot_neighbours_df_wo_overlaps <- data.frame()
 
     for (i in 1:length(so_list)){
@@ -2296,7 +2296,7 @@ if (NEIGHBORHOOD_ANALYSIS_PROGRAMS || NEIGHBOURHOOD_ANALYSIS_GCAR_CELLS ||
 
     # spot_neighbours_df_wo_overlaps <- spot_neighbours_df_wo_overlaps[spot_neighbours_df_wo_overlaps$nr_neighbours != 0,]
     saveRDS(spot_neighbours_df_wo_overlaps, file = paste(SAVE_FOLDER, "spot_neighbours_df_wo_overlaps.rds", sep = ""))
-  } else{spot_neighbours_df_wo_overlaps <- readRDS(paste("02_Visium_HD/03_datasets/04_bin_neighbours/ASPS-02/", "spot_neighbours_df_wo_overlaps.rds", sep = ""))}
+  } else{spot_neighbours_df_wo_overlaps <- readRDS(paste("02_Visium_HD/03_datasets/03_bin_neighbours/ASPS-02/", "spot_neighbours_df_wo_overlaps.rds", sep = ""))}
   print("Spot Neighbours Without Overlaps Dataframe Created and Saved:")
   print(Sys.time())
   
